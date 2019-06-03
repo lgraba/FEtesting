@@ -1,4 +1,5 @@
 // const {Map} = require('immutable')
+
 let error = {
     name: ['This field is required', 'Another error'],
     age: ['Only numeric characters are allowed'],
@@ -12,17 +13,11 @@ let error = {
 const flatten = ((obj, count = Object.keys(obj).length, result = {}) => {
     if (count === 0) {
         return result
-        // base case when both obj property names have already been counted. 
     }
     for (let key in obj) {
-        // iterates over object
         result[key] = obj[key].join('. ')
-        // sets new object called result to have the error objects properties names as keys
-        // concates the strings into new stings, separated by a period.
     }
     return result
-    // flatten(error, count - 1, result)
-    // console.log("result:", result)
 })
 flatten(error)
 console.log(flatten(error))
@@ -34,7 +29,7 @@ let error2 = {
         first: ['Only alphanumeric characters are allowed'],
         last: ['Only alphanumeric characters are allowed'],
     },
-    names: {}[{
+    names: {} [{
         first: ['Only alphanumeric characters are allowed'],
         last: ['Only alphanumeric characters are allowed'],
     }, {}],
@@ -47,9 +42,10 @@ let error2 = {
 
 const nestedMerge = ((error, transform = {}) => {
     if (error.name.first.toString() === error.name.last.toString()) {
-     transform.name = error.name.first.toString()
-     transform.names = error.name.first.toString()
+        transform.name = error.name.first.toString()
+        transform.names = error.name.first.toString()
     }
-    console.log(transform)
+    return transform
 })
 nestedMerge(error2)
+console.log(nestedMerge(error2))
