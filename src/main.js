@@ -46,6 +46,16 @@ const nestedMerge = ((error, transform = {}) => {
         transform.names = error.name.first.toString()
     }
     return transform
+    // transform = Object.keys(error).reduce(function (r, k) {
+    //     return r.concat(k, error[k])
+    // }, [])
+    // console.log("result",transform)
 })
 nestedMerge(error2)
 console.log(nestedMerge(error2))
+
+// const transformErrors = (obj)=>{
+//     nestedMerge()
+//     flatten()
+// }
+// transformErrors()
