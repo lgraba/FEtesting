@@ -1,5 +1,6 @@
 // const {Map} = require('immutable')
 
+// 1.
 let error = {
     name: ['This field is required', 'Another error'],
     age: ['Only numeric characters are allowed'],
@@ -22,6 +23,7 @@ const flatten = ((obj, count = Object.keys(obj).length, result = {}) => {
 flatten(error)
 console.log(flatten(error))
 
+// 2.
 // In case the errors are nested, you need to make sure that concatenated string won't have recurring errors. The nested structures could be both objects and arrays. The nested structures are not preserved, transformed object should have flat structure by default.
 
 let error2 = {
@@ -54,8 +56,21 @@ const nestedMerge = ((error, transform = {}) => {
 nestedMerge(error2)
 console.log(nestedMerge(error2))
 
-// const transformErrors = (obj)=>{
-//     nestedMerge()
-//     flatten()
-// }
-// transformErrors()
+
+// 3.
+// Sometimes, preserving nested structures could be useful when rendering errors on the screen. One of your implemented functions should take one or more arguments that specify the keys of error object for which you want to preserve the nested structure.
+//
+// For example, if you want to preserve nested structure for field `names`, the transformed object should look like:
+error3 = {
+  name: 'Only alphanumeric characters are allowed.',
+  names: [{}, {
+    first: 'Only alphanumeric characters are allowed.',
+    last: 'Only alphanumeric characters are allowed.',
+  }, {}],
+
+
+  // const transformErrors = (obj)=>{
+  //     nestedMerge()
+  //     flatten()
+  // }
+  // transformErrors()
