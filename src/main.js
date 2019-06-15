@@ -19,6 +19,7 @@ const flatten = ((obj, count = Object.keys(obj).length, result = {}) => {
         result[key] = obj[key].join('. ')
     }
     return result
+    // flatten(error, count - 1, result)
 })
 flatten(error)
 console.log(flatten(error))
