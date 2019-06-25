@@ -81,8 +81,12 @@ const nestedMerge = ((root, parentKey, path = Immutable.List(), result = mapper(
         if (!result)
             return nestedMerge(child, key, path.push(key), null);
 
-        // If we do have a result object, we're at the top of the hierarchy
-        result[key] = nestedMerge(child, key, path.push(key), null) + '.';
+        // If we do have a result object, we're at the top of the hierarchy and need to write some shit
+        if (result.hasOwnProperty(key))  {
+            result[key] += nestedMerge(child, key, path.push(key), null) + '.';
+        } else {
+            result[key] = nestedMerge(child, key, path.push(key), null) + '.';
+        }
     }
 
     return Immutable.fromJS(result);
