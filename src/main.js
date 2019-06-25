@@ -57,17 +57,12 @@ let immutableError2 = Immutable.fromJS(error2);
 const mapper = function mapper(keys, temp = {}) {
     keys.map(
         (value, index) => {
-            temp[value] = "";
+            temp[value] = '';
         }
     );
 
     return temp;
 };
-
-//
-// for(let key in obj) {
-//     result[key] = obj[key].join('. ')
-// }
 
 // Recursive nestedMerge
 const nestedMerge = ((root, parentKey, path = Immutable.List(), result = mapper(root.keySeq().toArray())) => {
@@ -82,17 +77,13 @@ const nestedMerge = ((root, parentKey, path = Immutable.List(), result = mapper(
             return nestedMerge(child, key, path.push(key), null);
 
         // If we do have a result object, we're at the top of the hierarchy and need to write some shit
-        if (result.hasOwnProperty(key))  {
-            result[key] += nestedMerge(child, key, path.push(key), null) + '.';
-        } else {
-            result[key] = nestedMerge(child, key, path.push(key), null) + '.';
-        }
+        result[key] += nestedMerge(child, key, path.push(key), null) + '.';
     }
 
     return Immutable.fromJS(result);
 });
 
-console.log('#2: ', nestedMerge(immutableError));
+console.log('#2: ', nestedMerge(immutableError2));
 
 // 3.
 // Sometimes, preserving nested structures could be useful when rendering errors
@@ -102,7 +93,7 @@ console.log('#2: ', nestedMerge(immutableError));
 //
 // For example, if you want to preserve nested structure for field `names`, the
 //  transformed object should look like:
-error3 = {
+error3response = {
     name: 'Only alphanumeric characters are allowed.',
     names: [{}, {
         first: 'Only alphanumeric characters are allowed.',
@@ -110,9 +101,39 @@ error3 = {
     }, {}]
 };
 
-// I would use the same recursive function, but take out the
+// Hierarchy Retainment Recursive Merge
+const nestedHierarchyMerge = ((
+    root,
+    parentKey,
+    path = Immutable.List(),
+    result = mapper(root.keySeq().toArray()),
+    retain = 'names' // Could make this a List/Array in order to accept multiple retainers
+) => {
+    if (!Immutable.isImmutable(root)) {
+        return root;
+    }
 
+    for (const [key, child] of root.toKeyedSeq()) {
+        if (!result)
+            return nestedMerge(child, key, path.push(key), null, retain);
+
+        result[key] += nestedMerge(child, key, path.push(key), null, retain) + '.';
+
+        // If our key matches the retainer on the way back up out of the recursion,
+        //  overwrite it with the entire child
+        if (retain === key) {
+            result[key] = child;
+        }
+    }
+
+    return Immutable.fromJS(result);
+});
+
+console.log('#3: ', nestedHierarchyMerge(immutableError2));
+
+// Exports for the Mocha test file
 exports._test = {
     flatten: flatten,
-    nestedMerge: nestedMerge
+    nestedMerge: nestedMerge,
+    nestedHierarchyMerge: nestedHierarchyMerge
 };
