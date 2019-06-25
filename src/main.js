@@ -1,12 +1,12 @@
-const {List,Map} = require('immutable');
-const Immutable = require('immutable');
+const {List, Map} = require('immutable')
+const Immutable = require('immutable')
 
 // 1.
 let error = {
     name: ['This field is required', 'Another error'],
     age: ['Only numeric characters are allowed'],
-};
-let immutableError = Immutable.fromJS(error);
+}
+let immutableError = Immutable.fromJS(error)
 // Desired output
 // error = {
 //   name: 'This field is required. Another error.',
@@ -15,7 +15,7 @@ let immutableError = Immutable.fromJS(error);
 
 // Converting from and to Immutable Map
 const flatten = ((obj, result = {}) => {
-    obj = obj.toJS();
+    obj = obj.toJS()
 
     if (obj.size === 0) {
         return obj
@@ -25,7 +25,7 @@ const flatten = ((obj, result = {}) => {
         result[key] = obj[key].join('. ')
     }
 
-    return Immutable.fromJS(result);
+    return Immutable.fromJS(result)
 })
 console.log('#1: ', flatten(immutableError))
 
@@ -44,8 +44,8 @@ let error2 = {
         first: ['Only alphanumeric characters are allowed'],
         last: ['Only alphanumeric characters are allowed'],
     }, {}],
-};
-let immutableError2 = Immutable.fromJS(error2);
+}
+let immutableError2 = Immutable.fromJS(error2)
 // Desired output
 // error = {
 //   name: 'Only alphanumeric characters are allowed.',
@@ -73,13 +73,13 @@ const nestedMerge = ((root, parentKey, path = Immutable.List(), result = mapper(
     for (const [key, child] of root.toKeyedSeq()) {
         // If we don't have a result object, then we need to recurse and pass the Error value up
         if (!result)
-            return nestedMerge(child, key, path.push(key), null);
+            return nestedMerge(child, key, path.push(key), null)
 
         // If we do have a result object, we're at the top of the hierarchy and need to write some shit
-        result[key] += nestedMerge(child, key, path.push(key), null) + '.';
+        result[key] += nestedMerge(child, key, path.push(key), null) + '.'
     }
 
-    return Immutable.fromJS(result);
+    return Immutable.fromJS(result)
 })
 console.log('#2: ', nestedMerge(immutableError2))
 
@@ -106,7 +106,7 @@ const nestedHierarchyMerge = ((
     retain = 'names' // Could make this a List/Array in order to accept multiple retainers
 ) => {
     if (!Immutable.isImmutable(root)) {
-        return root;
+        return root
     }
 
     for (const [key, child] of root.toKeyedSeq()) {
