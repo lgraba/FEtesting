@@ -3,12 +3,12 @@ const expect = chai.expect
 const main = require('../src/main')
 const {Map} = require('immutable')
 
-const Immutable = require('immutable');
-const assert = require('assert');
+const Immutable = require('immutable')
+const assert = require('assert')
 
 
 function transformErrors() {
-    return Immutable.Map();
+    return Immutable.Map()
 }
 
 it('should tranform errors', () => {
